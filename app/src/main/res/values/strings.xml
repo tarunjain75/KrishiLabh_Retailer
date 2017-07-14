@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">KrishiLabh_Retailer</string>
+    <string name="signin_title">Krishi_Labh</string>
+    <string name="create_account">Create an account</string>
+    <string name="signUp_title">Register</string>
+    <string name="email_hint">Email</string>
+    <string name="storeName">Store Name</string>
+    <string name="locationMain">Location</string>
+    <string name="updateDemand">Update Demand</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="fpiNearby">FPI Nearby</string>
+    <string name="Payment">Payment</string>
+    <string name="Purchase_History">Purchase History</string>
+    <string name="fpiName">FPI Name</string>
+    <string name="ItemName">Item Name</string>
+    <string name="Quantity">Quantity in Kg</string>
+    <string name="ten">10</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
+    <string name="changeLanguage">Change Language</string>
+    <string name="Share">Share this App</string>
+    <string name="rating">Rate this App</string>
+    <string name="logout">Log OUT</string>
+    <string name="matchPercent">Match Percent</string>
+    <string name="GainPercent">Gain Percent</string>
+    <string name="MatchNo.">80%</string>
+    <string name="GainNo.">100%</string>
+    <string name="home">Home</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password </string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="my_payment">My Payments</string>
+    <string name="fpi_name">FPI name</string>
+    <string name="Pay">PAY</string>
+    <string name="NameOfItem">Name of Item</string>
+    <string name="QuantityAvailable">Quantity Required</string>
+    <string name="RateOfItem">Rate of Item</string>
+    <string name="signUp">Sign Up</string>
+    <string name="password">Password</string>
+    <string name="comapanyName">Comapny</string>
+
+
+
+</resources>

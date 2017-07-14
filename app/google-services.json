@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "231136236481",
+    "firebase_url": "https://krishilabhretailer.firebaseio.com",
+    "project_id": "krishilabhretailer",
+    "storage_bucket": "krishilabhretailer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231136236481:android:3c6c5bfd205b552d",
+        "android_client_info": {
+          "package_name": "example.com.krishilabh_retailer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "231136236481-f9l8rkbd2o269lkf45iglib6iefnvsnb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "example.com.krishilabh_retailer",
+            "certificate_hash": "64b132a2f1c3fa1f438f6c662b83cb4447996002"
+          }
+        },
+        {
+          "client_id": "231136236481-0qbf5fijlravpfd34senq125qa7ic4qg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCW8pUpqE3Mr12B0llqkDbjg26yUMIvrTI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "231136236481-0qbf5fijlravpfd34senq125qa7ic4qg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
