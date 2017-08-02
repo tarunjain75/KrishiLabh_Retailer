@@ -11,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,16 +23,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import example.com.krishilabh_retailer.Adapter.CustomTopFpiAdapter;
 import example.com.krishilabh_retailer.FpiInfo;
 import example.com.krishilabh_retailer.R;
-import example.com.krishilabh_retailer.Retailer;
+import example.com.krishilabh_retailer.Data.Retailer;
 
 
 /**
@@ -42,108 +39,79 @@ import example.com.krishilabh_retailer.Retailer;
 public class TopRatedFpiFragment extends android.support.v4.app.Fragment {
     ListView listView;
 
-    ArrayList<String> listItems=new ArrayList<String>();
+    ArrayList<String> listItems = new ArrayList<String>();
     int retailerAmount;
     int retailerQuantity;
-    int FPIQuantity;
-    int FPIAmount;
-    int distance;
     Retailer retailer;
     String product;
-    ArrayList list=new ArrayList();
+    ArrayList list = new ArrayList();
 
     Map<String, Object> name;
     Map<String, Object> productName;
     Map<String, Object> fields;
+    //HashMap<String, Object> Itemname;
+    HashMap<String, Object> Items = new HashMap<String, Object>();
+    //HashMap<String ,Object> Product=new HashMap<String ,Object>();
 
     static final int dutiesCost = 250;
     static final int logisticsCost = 2000;
     static final int damagesCost = 350;
 
 
-
-    ArrayList<String> Loc= new ArrayList<String>();
-    String Matchpercent[]={"90%","80%","70%","60%","50%","40%"};
-    String Gainpercent[]={"90%","80%","70%","60%","50%","40%"};
+    ArrayList<String> Name = new ArrayList<>();
+    ArrayList<String> Itemname = new ArrayList<String>();
+    ArrayList<String> Product = new ArrayList<String>();
+    String latitude;
+    String longitude;
+    ArrayList<String> Loc = new ArrayList<String>();
+    ArrayList<Integer> Matchpercent = new ArrayList<Integer>();
+    String Gainpercent[] = {"90%", "80%", "70%", "60%", "50%", "40%"};
     CustomTopFpiAdapter customTopFpiAdapter;
-    ViewGroup rootview;
+    int Count = 0, i;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+
         name = new HashMap<String, Object>();
         productName = new HashMap<String, Object>();
         fields = new HashMap<String, Object>();
+        //Itemname=new HashMap<String, Object>();
         retailer = new Retailer();
         product = "papad";
         retailerAmount = 500;
         retailerQuantity = 2;//retailer.getQuantity();
         retailerAmount *= retailerQuantity;
-        retailerAmount = retailerAmount+dutiesCost+logisticsCost-damagesCost;
-//        listItems.add("Fpi 1");
-//        listItems.add("Fpi 2");
-//        listItems.add("Fpi 3");
-//        listItems.add("Fpi 4");
-//        listItems.add("Fpi 5");
-//        listItems.add("Fpi 6");
-//        listItems.add("Fpi 7");
+        retailerAmount = retailerAmount + dutiesCost + logisticsCost - damagesCost;
 //
-//
-//        Loc.add("Fpi 1");
-//        Loc.add("Fpi 2");
-//        Loc.add("Fpi 3");
-//        Loc.add("Fpi 4");
-//        Loc.add("Fpi 5");
-//        Loc.add("Fpi 6");
-//        Loc.add("Fpi 7");
-
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-         product = settings.getString("product", "");
-        final String company = settings.getString("company", "");
-
-        Log.e("Test", name.toString() );
-       /* FirebaseOptions options = new FirebaseOptions.Builder()
-                .setApplicationId("1:234194199814:android:004e0890eb3925e0") // Required for Analytics.
-                .setApiKey("AIzaSyA7NOx6ZjkcAm24kiQ3WnWtE8JSmIBd9PY") // Required for Auth.
-                .setDatabaseUrl("https://krishilabhfpi.firebaseio.com/") // Required for RTDB.
-                .build();
-        FirebaseApp.initializeApp(getActivity() *//* Context *//*, options, "secondary");
-        //Retrieve my other app.
-        FirebaseApp app = FirebaseApp.getInstance("secondary");*/
-        DatabaseReference myRef2= FirebaseDatabase.getInstance().getReference("FPI_Product_list");
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        DatabaseReference myRef2 = FirebaseDatabase.getInstance().getReference("Retailer_update").child(settings.getString("company", null));
         System.out.println("check");
 
-       // Toast.makeText(getActivity(), "hey", Toast.LENGTH_SHORT).show();
-       // System.out.print(myRef2.toString());
+
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
-              name = (Map<String, Object>) dataSnapshot.getValue();
+                try {
+                    name = (Map<String, Object>) dataSnapshot.getValue();
 
-                String []key=new String [name.size()];
-                int i=0;
-                for(String k:name.keySet())
-                {
-                    key[i]=k;
-                    Object USER=name.get(key[i]);
-                    HashMap<String,Object>test=(HashMap<String, Object>) USER;
+                    String[] key = new String[name.size()];
+                    int i = 0;
+                    for (String k : name.keySet()) {
+                        key[i] = k;
+                        Object USER = name.get(key[i]);
+                        HashMap<String, Object> test = (HashMap<String, Object>) USER;
 
-
-                    if(test.containsKey(product))
-                    {System.out.println("Author: " +test);
-                        listItems.add(k);
-                        //Loc.add(k);
+                        Itemname.add((String) test.get("product"));
+                        Log.e("Test 1", Itemname.toString());
                     }
+               /* Log.e("Test", name.toString() );*/
 
+                }catch (NullPointerException e){
+                    Log.e("Exception",e.toString());
                 }
-
-//                Toast.makeText(getActivity(), name.toString(), Toast.LENGTH_LONG).show();
-                Log.e("Test", name.toString() );
-
-                System.out.println("Title: " + name.toString());
-
-                // ...
             }
 
             @Override
@@ -156,66 +124,118 @@ public class TopRatedFpiFragment extends android.support.v4.app.Fragment {
         myRef2.addValueEventListener(postListener);
 
 
+        latitude = settings.getString("latitude", null);
+        longitude = settings.getString("longitude", null);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("path/to/geofire");
+        GeoFire geoFire = new GeoFire(ref);
+        // geoFire.setLocation("firebase-hq", new GeoLocation(37.7853889, -122.4056973));
 
-        rootview = (ViewGroup) inflater.inflate(R.layout.list_view, container, false);
-        listView=(ListView)rootview.findViewById(R.id.listview);
+        //making search query in nearby area
+
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(Double.parseDouble(latitude), Double.parseDouble(longitude)), 50);
+        final HashMap<String, GeoLocation> loc = new HashMap<>();
+        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(final String key, GeoLocation location) {
+                System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
+                loc.put(key, location);
+                Name.add(key);
+                Count = 0;
+                DatabaseReference myRef3 = FirebaseDatabase.getInstance().getReference("FPI_Product_list").child(key);
+                myRef3.addValueEventListener( new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        HashMap<String, Object> fpiname = new HashMap<String, Object>();
+                        fpiname = (HashMap<String, Object>) dataSnapshot.getValue();
+                        try{
+                            Log.e("fpiName",fpiname.toString());
+                            String[] ky = new String[fpiname.size()];
+                            int j = 0;
+                            for (String t : fpiname.keySet()) {
+                                ky[j] = t;
+                                Object User = fpiname.get(ky[j]);
+                                HashMap<String, Object> TEST = (HashMap<String, Object>) User;
+                                Log.e("Test 3", TEST.toString());
+                                Product.add((String) TEST.get("product"));
+                            }
+                            for (int counter = 0; counter < Itemname.size(); counter++) {
+                                if (Product.contains(Itemname.get(counter))) {
+                                    Count++;
+                                }
+                            }
+                            if (Count > 0) {
+                                listItems.add(key);
+                                Matchpercent.add((Count * 100) / Itemname.size());
+                                Count=0;
+                            }
+
+                            Log.e("Test 4", listItems.toString());
+                            System.out.println("Match%" + " " + Matchpercent);
+
+                        }
+                        catch (NullPointerException nulpointer){
+                            Log.e("Exception",nulpointer.toString());
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                settingadapter();
+
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+                System.out.println(String.format("Key %s is no longer in the search area", key));
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+                System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+                System.out.println("All initial data has been loaded and events have been fired!");
+                System.out.println(String.format(loc.toString()));
+
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+                System.err.println("There was an error with this query: " + error);
+            }
+        });
 
 
-        customTopFpiAdapter=new CustomTopFpiAdapter(getActivity(),listItems,Matchpercent,Gainpercent);
-        listView.setAdapter(customTopFpiAdapter);
+        View view = (View) inflater.inflate(R.layout.top_rated_list_view, container, false);
+        listView = (ListView)view.findViewById(R.id.ListView);
+
+
+
+        //listView.setAdapter(customTopFpiAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // When clicked, show a toast with the TextView text
-                Intent in=new Intent (getActivity(),FpiInfo.class);
-                in.putExtra("Company",listItems.get(position));
+                Intent in = new Intent(getActivity(), FpiInfo.class);
+                in.putExtra("Company", listItems.get(position));
                 startActivity(in);
             }
         });
-        return rootview;
-    }
 
-    public void getAllFPI()
+        return view;
+    }
+    public void settingadapter()
     {
-        Set keys = name.keySet();
-
-        for (Iterator i = keys.iterator(); i.hasNext();)
-        {
-            Integer key = (Integer) i.next();
-            productName = (Map) name.get(key);
-            if(productName.containsKey(product))
-            {
-                fields = (Map) productName.get(product);
-                FPIQuantity = (int) fields.get("quantity");
-                FPIAmount = (int) fields.get("Rate");
-//                distance = (int) fields.get("Distance");
-                if(FPIQuantity >= retailerQuantity)
-                {
-                    if((FPIAmount*retailerQuantity) > retailerAmount)
-                        System.out.print("NO BUY");
-                    else
-                        list.add(name.get(key)+":"+product+":"+retailerQuantity+":"+retailerAmount);
-                }
-            }
-        }
+        listView.setAdapter(customTopFpiAdapter);
+        customTopFpiAdapter = new CustomTopFpiAdapter(getActivity(), listItems,Matchpercent);
 
     }
 
-    public void sortList()
-    {
-        for(int i=0;i<list.size()-1;i++)
-        {
-            String str = (String) list.get(i);
-            String arr[] = str.split(":");
-            int a = Integer.parseInt(arr[4]);
-            for(int j=i+1;j<list.size();j++)
-            {
-                String str1 = (String) list.get(i);
-                String brr[] = str1.split(":");
-                int b = Integer.parseInt(brr[4]);
-                if(a > b)
-                    Collections.swap(list, i, j);
-            }
-        }
-    }
 }

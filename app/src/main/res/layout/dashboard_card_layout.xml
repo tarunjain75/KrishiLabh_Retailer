@@ -9,30 +9,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="4dp"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="2dp"
         android:elevation="10dp"
         app:cardElevation="10dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="3">
-            <ImageView
+            <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-
+                android:layout_weight="0.4"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/edit_product"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_edit"/>
+                android:background="@drawable/ic_border_color_black_18dp"/>
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_weight="2.7"
+                android:layout_weight="2.6"
                 android:padding="10dp"
                 android:layout_height="wrap_content">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:layout_marginLeft="25dp"
                     android:layout_alignParentLeft="true">
                     <TextView
                         android:layout_width="wrap_content"
@@ -54,8 +56,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:drawableLeft="@drawable/currency"
+                    android:drawableLeft="@drawable/money"
                     android:text="@string/ten"
+                    android:layout_marginRight="15dp"
                     android:id="@+id/PriceRate"
                     android:textSize="40dp"/>
             </RelativeLayout>

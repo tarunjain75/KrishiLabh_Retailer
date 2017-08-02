@@ -170,43 +170,14 @@ public class LoginActivity extends Activity {
             cancel = true;
         }
 
-//        if (cancel) {
-//            // There was an error; don't attempt login and focus the first
-//            // form field with an error.
-//            focusView.requestFocus();
-//        } else {
-//            // Show a progress spinner, and kick off a background task to
-//            // perform the user login attempt.
-//            showProgress(true);
-//            mAuthTask = new UserLoginTask(email, password);
-//            mAuthTask.execute((Void) null);
-//        }
+
         signin(email,password);
 
 
 
     }
 
-    //public void firebaseregistration(String email, String password)
-   // {
 
-
-        //createaccount(email,password);
-        //DatabaseReference myRef2= FirebaseDatabase.getInstance().getReference();
-        //Registration user2=new Registration(company.getText().toString(),latitude,longitude,Licence.getText().toString(),phone.getText().toString(),email,password);
-        //myRef2.child("FPI").child(company.getText().toString()).setValue(user2);
-//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("path/to/geofire");
-//         GeoFire geoFire = new GeoFire(ref);
-//         geoFire.setLocation(company.getText().toString(), new GeoLocation(latitude, longitude));
-//        signin(email,password);
-
-        //editor2.putString("latitude", String.valueOf(latitude));
-        //editor2.putString("longitude", String.valueOf(longitude));
-        //editor2.putString("product", "papad");
-        //editor2.putString("company",company.getText().toString());
-        //editor2.commit();
-
-  //  }
 
 
     private boolean isEmailValid(String email) {
@@ -310,6 +281,8 @@ public class LoginActivity extends Activity {
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w("New User", "signInWithEmail", task.getException());
+                            Intent intent=new Intent(getApplicationContext(),LoginActivity.class);
+                            startActivity(intent);
                             Toast.makeText(LoginActivity.this, "Authentication failed.Unable to sign in",
                                     Toast.LENGTH_SHORT).show();
                         }

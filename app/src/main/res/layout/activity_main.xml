@@ -104,10 +104,6 @@
                 android:layout_height="match_parent"
                 >
 
-
-
-
-
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -431,6 +427,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+
                     >
                     <ImageView
                         android:layout_width="match_parent"
@@ -450,7 +447,7 @@
             </RelativeLayout>
         </FrameLayout>
         <include
-            android:layout_width="300dp"
+            android:layout_width="250dp"
             android:layout_height="match_parent"
             layout="@layout/drawer_menu_layout"
             android:layout_gravity="left"

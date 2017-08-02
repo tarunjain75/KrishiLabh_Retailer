@@ -6,23 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="120dp"
             android:background="#29b6f6"
             android:id="@+id/Up"
             android:elevation="10dp"
-
+            android:orientation="vertical"
             >
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_keyboard_arrow_left"
-                android:padding="5dp"
+                android:src="@drawable/ic_keyboard_backspace_white_24dp"
+                android:padding="10dp"
                 android:layout_marginStart="15dp"
                 android:id="@+id/dash_back"/>
             <TextView
@@ -33,10 +33,41 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="@android:color/white"
-                android:textSize="40dp"/>
+                android:textSize="35dp"/>
         </LinearLayout>
-        <include layout="@layout/list_view" />
-    </LinearLayout>
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/Up">
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/listview">
+
+            </ListView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/Up"
+            >
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:id="@+id/Dashboard_loading_layout"
+                />
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:id="@+id/progressDashboard"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
 
 
 

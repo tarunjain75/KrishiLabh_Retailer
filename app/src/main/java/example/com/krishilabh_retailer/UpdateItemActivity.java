@@ -14,6 +14,8 @@ import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import example.com.krishilabh_retailer.Data.Product;
+
 /**
  * Created by User on 4/1/2017.
  */
@@ -42,12 +44,15 @@ public class UpdateItemActivity extends Activity {
         availbaleQuant = (EditText) findViewById(R.id.input_ItemQuantity);
         itemRate = (EditText) findViewById(R.id.input_ItemRate);
         update = (TextView) findViewById(R.id.input_update);
-        gotoDash = (TextView) findViewById(R.id.GotoDash);
+
         unit = (TextView) findViewById(R.id.text);
 //        Spinner sp=(Spinner)findViewById(R.id.android_material_design_spinner);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         company = settings.getString("company", "");
-
+        final Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            nameItem.setText(bundle.getString("product_Name"));
+        }
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,7 +62,11 @@ public class UpdateItemActivity extends Activity {
                     DatabaseReference myRef2 = FirebaseDatabase.getInstance().getReference();
                     Product user2 = new Product(nameItem.getText().toString(), availbaleQuant.getText().toString(), itemRate.getText().toString(), unit.getText().toString());
                     myRef2.child("Retailer_update").child(company).child(nameItem.getText().toString()).setValue(user2);
+                    if(bundle!=null){
+                        onBackPressed();
+                    }
                     Toast.makeText(UpdateItemActivity.this,"Item Updated Succesfully",Toast.LENGTH_LONG).show();
+
                     /*Intent in = new Intent(UpdateItemActivity.this, MainActivity.class);
                     startActivity(in);*/
 

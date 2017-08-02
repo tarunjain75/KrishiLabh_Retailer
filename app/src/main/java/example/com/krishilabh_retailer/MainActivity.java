@@ -3,9 +3,13 @@ package example.com.krishilabh_retailer;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.text.Layout;
@@ -28,6 +32,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.JsonElement;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +46,8 @@ import ai.api.model.AIResponse;
 import ai.api.ui.AIButton;
 import example.com.krishilabh_retailer.fragments.FpiNearbyViewPagerFragmentActivity;
 
+import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
+
 public class MainActivity extends Activity implements View.OnClickListener{
     ImageButton drawer_menu,notify,search;
     DrawerLayout drawerLayout;
@@ -50,12 +58,29 @@ public class MainActivity extends Activity implements View.OnClickListener{
     String longitude;
     ImageView imageView;
     ProgressBar progressBar;
-
+    private MediaRecorder mRecorder;
+    private String Filename=null;
+    private static final String LOG_TAG="Record";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+       /* ArrayList<String> arrPerm = new ArrayList<>();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            arrPerm.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            arrPerm.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if(!arrPerm.isEmpty()) {
+            String[] permissions = new String[arrPerm.size()];
+            permissions = arrPerm.toArray(permissions);
+            ActivityCompat.requestPermissions(this, permissions, MY_PERMISSIONS_REQUEST);
+        }*/
+
+
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor2 = settings.edit();
         progressBar=(ProgressBar)findViewById(R.id.login_progress);
@@ -122,41 +147,14 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
 
 
-        //final SharedPreferences.Editor editor2 = settings.edit();
-        /*DatabaseReference myRef2= FirebaseDatabase.getInstance().getReference();
-        myRef2.child("Retailer").orderByChild("username").equalTo(settings.getString("Email","")).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()){
-                    String company=childSnapshot.getKey();
-                    //System.out.println("check"+" "+company);
-                    if(settings.getString("company",null)!=null){
-                        editor2.remove("company").apply();
-                        editor2.putString("company",company).apply();
-                    }
-                    else{
-                        editor2.putString("company",company).apply();
-                    }
 
-
-                    System.out.println("MainActivity"+" "+settings.getString("company",null));
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("Test", "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        });*/
         store_name=(TextView)findViewById(R.id.store_name);
         store_name.setText(settings.getString("company",null));
         System.out.println("Company main"+settings.getString("company",null));
-        DatabaseReference myRef2 = FirebaseDatabase.getInstance().getReference();
+        /*DatabaseReference myRef2 = FirebaseDatabase.getInstance().getReference();
 
         myRef2.child("Current_User").child(settings.getString("company", null)).setValue("true");
-
+*/
 
         final AIConfiguration config = new AIConfiguration("257cd8e17d844690ac5e271733f24c1c",
                 AIConfiguration.SupportedLanguages.English,   //for voice and both for text
@@ -436,7 +434,27 @@ public class MainActivity extends Activity implements View.OnClickListener{
         Toast.makeText(getApplicationContext(), "purchase history section selected!",
                 Toast.LENGTH_SHORT).show();
     }
+    private void startRecording() {
+        mRecorder = new MediaRecorder();
+        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mRecorder.setOutputFile(Filename);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
+        try {
+            mRecorder.prepare();
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "prepare() failed");
+        }
+
+        mRecorder.start();
+    }
+
+    private void stopRecording() {
+        mRecorder.stop();
+        mRecorder.release();
+        mRecorder = null;
+    }
 
 
 }

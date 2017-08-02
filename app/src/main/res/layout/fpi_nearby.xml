@@ -13,17 +13,19 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="54dp"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <ImageView
+                    android:id="@+id/arrowback"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_keyboard_arrow_left"
-                    android:id="@+id/arrowback"
+                    android:src="@drawable/ic_keyboard_backspace_white_24dp"
                     />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

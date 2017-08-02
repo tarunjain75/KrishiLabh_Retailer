@@ -48,8 +48,9 @@ public class FpiNearbyViewPagerFragmentActivity extends FragmentActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TopRatedFpiFragment(), "Top FPI Nearby");
+
         adapter.addFragment(new AllFpiFragment(), "All FPI Nearby");
+        adapter.addFragment(new TopRatedFpiFragment(), "Top FPI Nearby");
         viewPager.setAdapter(adapter);
     }
 

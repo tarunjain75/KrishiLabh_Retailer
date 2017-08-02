@@ -3,18 +3,28 @@ package example.com.krishilabh_retailer;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -24,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import example.com.krishilabh_retailer.Adapter.DashboardUpdaterAdapter;
+import example.com.krishilabh_retailer.Data.Product;
 
 
 /**
@@ -32,64 +43,135 @@ import example.com.krishilabh_retailer.Adapter.DashboardUpdaterAdapter;
 
 public class DashBoardFragmentActivity extends Activity {
     ListView listView;
-    ImageView editButton,arrowback;
-
-    Dialog dailog;
-    EditText editQuantity,editPrice;
-    TextView update,priceRate,quantity;
+    ImageView loadingLayout,arrowback;
+    ProgressBar progressBar;
     ArrayList<String> ItemName=new ArrayList<String>();
     ArrayList<String> Quantity=new ArrayList<String>();
     ArrayList<String>  Rate=new ArrayList<String>();
+    ArrayList<String> Unit=new ArrayList<String>();
 
     DashboardUpdaterAdapter dashboardUpdaterAdapter;
+    public SwipeRefreshLayout swipeContainer;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
+        progressBar=(ProgressBar)findViewById(R.id.progressDashboard);
+        loadingLayout=(ImageView)findViewById(R.id.Dashboard_loading_layout);
+
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeContainer.setRefreshing(true);
+
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String company = settings.getString("company", null);
+
+                DatabaseReference myRef2= FirebaseDatabase.getInstance().getReference("Retailer_update").child(company);
+
+                ValueEventListener postListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        System.out.println("hello inside");// Get Post object and use the values to update the UI
+
+                        try {
+                            ItemName.clear();
+                            Quantity.clear();
+                            Rate.clear();
+                            Unit.clear();
+                            Map<String, Object> name = new HashMap<String, Object>();
+                            name = (Map<String, Object>) dataSnapshot.getValue();
+                            String[] key = new String[name.size()];
+                            int i = 0;
+                            for (String k : name.keySet()) {
+                                key[i] = k;
+                                System.out.print(k);
+                                Object USER = name.get(key[i]);
+                                HashMap<String, Object> test = (HashMap<String, Object>) USER;
+                                Log.e("Test inside",test.toString());
+
+                                ItemName.add((String) test.get("product"));
+                                Quantity.add((String) test.get("quantity"));
+                                Rate.add((String) test.get("Rate"));
+                                Unit.add((String)test.get("unit"));
+
+
+                            }
+                        }catch (NullPointerException exception){
+                            Log.e("exception",exception.toString());
+                        }
+                        Log.e("Quantity inside",Quantity.toString());
+                        Log.e("Rate inside",Rate.toString());
+                        swipeContainer.setRefreshing(false);
+
+                       /* loadingLayout.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.GONE);
+*/                      listView=(ListView)findViewById(R.id.listview);
+                        dashboardUpdaterAdapter= new DashboardUpdaterAdapter(getApplicationContext(),ItemName,Quantity,Rate,Unit);
+                        listView.setAdapter(dashboardUpdaterAdapter);
+                        // ...
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Getting Post failed, log a message
+                        Log.w("Test", "loadPost:onCancelled", databaseError.toException());
+                        // ...
+                    }
+                };
+                myRef2.addValueEventListener(postListener);
+
+
+            }
+        });
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String company = settings.getString("company", null);
 
         DatabaseReference myRef2= FirebaseDatabase.getInstance().getReference("Retailer_update").child(company);
 
-        // Toast.makeText(getActivity(), "hey", Toast.LENGTH_SHORT).show();
-        // System.out.print(myRef2.toString());
-        ValueEventListener postListener = new ValueEventListener() {
+     ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 System.out.println("hello");// Get Post object and use the values to update the UI
 
-                Map<String,Object> name = new HashMap<String, Object>();
-                name = (Map<String, Object>)dataSnapshot.getValue();
+                try {
+                    ItemName.clear();
+                    Quantity.clear();
+                    Rate.clear();
+                    Unit.clear();
+                    Map<String, Object> name = new HashMap<String, Object>();
+                    name = (Map<String, Object>) dataSnapshot.getValue();
+                    String[] key = new String[name.size()];
+                    int i = 0;
+                    for (String k : name.keySet()) {
+                        key[i] = k;
+                        System.out.print(k);
+                        Object USER = name.get(key[i]);
+                        HashMap<String, Object> test = (HashMap<String, Object>) USER;
 
 
-//                Toast.makeText(getApplicationContext(), name.toString(), Toast.LENGTH_LONG).show();
-//
-//                Toast.makeText(getApplicationContext(), (String) name.get("product"), Toast.LENGTH_LONG).show();
-                String []key=new String [name.size()];
-                int i=0;
-                for(String k:name.keySet())
-                {
-                    key[i] = k;
+                        ItemName.add((String) test.get("product"));
+                        Quantity.add((String) test.get("quantity"));
+                        Rate.add((String) test.get("Rate"));
+                        Unit.add((String)test.get("unit"));
 
-                    Object USER = name.get(key[i]);
-                    HashMap<String, Object> test = (HashMap<String, Object>) USER;
-//                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//                    String company = settings.getString("company", "");
-//                    if(k.equals(company))
-//                    {
-                    System.out.print(name);
 
-                    ItemName.add((String) test.get("product"));
-                    Quantity.add((String) test.get("quantity"));
-                    Rate.add((String) test.get("Rate"));
-
-//                    }
+                    }
+                }catch (NullPointerException exception){
+                    Log.e("exception",exception.toString());
                 }
-
-
-
+                listView=(ListView)findViewById(R.id.listview);
+                dashboardUpdaterAdapter= new DashboardUpdaterAdapter(getApplicationContext(),ItemName,Quantity,Rate,Unit);
+                listView.setAdapter(dashboardUpdaterAdapter);
+                loadingLayout.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
 
                 // ...
             }
@@ -105,16 +187,14 @@ public class DashBoardFragmentActivity extends Activity {
 
 
 
-        listView=(ListView)findViewById(R.id.listview);
-        dashboardUpdaterAdapter= new DashboardUpdaterAdapter(getApplicationContext(),ItemName,Quantity,Rate);
-        listView.setAdapter(dashboardUpdaterAdapter);
+
         initView();
 
     }
 
     private void initView() {
-        priceRate=(TextView)findViewById(R.id.PriceRate);
-        quantity=(TextView)findViewById(R.id.Quantity);
+
+
         arrowback=(ImageView)findViewById(R.id.dash_back);
         arrowback.setOnClickListener(new View.OnClickListener() {
             @Override

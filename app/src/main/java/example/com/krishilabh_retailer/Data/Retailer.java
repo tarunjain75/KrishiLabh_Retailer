@@ -1,4 +1,4 @@
-package example.com.krishilabh_retailer;
+package example.com.krishilabh_retailer.Data;
 
 /**
  * Created by tarun on 2/4/17.

@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_clear_black_24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:id="@+id/clear"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,7 +20,7 @@
             android:weightSum="3">
         <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_weight="1.5"
             android:layout_height="wrap_content"
             android:paddingStart="20dp"
             android:paddingEnd="20dp">
@@ -23,6 +31,18 @@
                 android:id="@+id/edit_quant"/>
 
         </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:layout_height="wrap_content"
+                android:paddingEnd="20dp">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="edit unit"
+                    android:id="@+id/edit_unit"/>
+
+            </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
         <android.support.design.widget.TextInputLayout
@@ -49,7 +69,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:id="@+id/UpadteItem"
+            android:id="@+id/UpadteItemDialog"
             android:background="@drawable/round_button"/>
 
     </LinearLayout>

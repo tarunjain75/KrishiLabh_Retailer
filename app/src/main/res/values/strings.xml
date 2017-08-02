@@ -48,7 +48,8 @@
     <string name="RateOfItem">Rate of Item</string>
     <string name="signUp">Sign Up</string>
     <string name="password">Password</string>
-    <string name="comapanyName">Comapny</string>
+    <string name="comapanyName">Company</string>
+    <string name="number_picker_formatter">%02d</string>
 
 
 

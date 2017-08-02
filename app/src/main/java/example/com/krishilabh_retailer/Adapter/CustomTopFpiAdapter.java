@@ -1,6 +1,8 @@
 package example.com.krishilabh_retailer.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,20 +24,19 @@ public class CustomTopFpiAdapter extends BaseAdapter {
     public Context context;
     public ArrayList<String> listItems=new ArrayList<>();
 
-    public String Matchpercent[];
+    public ArrayList<Integer>  Matchpercent=new ArrayList<Integer> ();
     public String Gainpercent[];
 
-    public CustomTopFpiAdapter(Context context,ArrayList<String> listItems,String M[],String G[]){
+    public CustomTopFpiAdapter(Context context, ArrayList<String> listItems, ArrayList<Integer> M ){
         this.context=context;
         this.listItems=listItems;
-
         this.Matchpercent=M;
-        this.Gainpercent=G;
+
         Newinflator= LayoutInflater.from(context);
     }
     @Override
     public int getCount() {
-        return (listItems.size() - 1 );
+        return (Matchpercent.size()-1 );
     }
 
     @Override
@@ -52,13 +53,12 @@ public class CustomTopFpiAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView=Newinflator.inflate(R.layout.top_fpi_nearby,null);
         TextView title=(TextView)convertView.findViewById(R.id.title);
-        TextView location=(TextView)convertView.findViewById(R.id.location_topFpi);
-        TextView machpercent=(TextView)convertView.findViewById(R.id.Matchpercent);
-        TextView gainpercent=(TextView)convertView.findViewById(R.id.Gainpercent);
-        title.setText(listItems.get(position));
 
-        machpercent.setText(Matchpercent[position]);
-        gainpercent.setText(Gainpercent[position]);
+        TextView machpercent=(TextView)convertView.findViewById(R.id.Matchpercent);
+
+        title.setText(listItems.get(position));
+        machpercent.setText(String.valueOf(Matchpercent.get(position)));
+        //gainpercent.setText(Gainpercent[position]);
         return convertView;
     }
 }
