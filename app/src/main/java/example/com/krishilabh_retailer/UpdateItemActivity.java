@@ -21,10 +21,10 @@ import example.com.krishilabh_retailer.Data.Product;
  */
 
 public class UpdateItemActivity extends Activity {
-    EditText nameItem,availbaleQuant,itemRate;
+    EditText nameItem,availbaleQuant,itemRate,unit;
     TextView update,gotoDash;
     String company;
-    TextView unit;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +45,7 @@ public class UpdateItemActivity extends Activity {
         itemRate = (EditText) findViewById(R.id.input_ItemRate);
         update = (TextView) findViewById(R.id.input_update);
 
-        unit = (TextView) findViewById(R.id.text);
+         unit = (EditText) findViewById(R.id.input_unit);
 //        Spinner sp=(Spinner)findViewById(R.id.android_material_design_spinner);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         company = settings.getString("company", "");
