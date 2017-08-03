@@ -3,16 +3,12 @@ package example.com.krishilabh_retailer;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -25,16 +21,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.JsonElement;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import ai.api.AIDataService;
@@ -46,101 +43,159 @@ import ai.api.model.AIResponse;
 import ai.api.ui.AIButton;
 import example.com.krishilabh_retailer.fragments.FpiNearbyViewPagerFragmentActivity;
 
-import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
-
 public class MainActivity extends Activity implements View.OnClickListener{
     ImageButton drawer_menu,notify,search;
     DrawerLayout drawerLayout;
     TextView store_name,home_option,profile_option,settings_option,changeLanguage_option,share_option,rate_option,logOut_option;
     FrameLayout framelay;
     View menu_view;
-    String latitude;
-    String longitude;
+
     ImageView imageView;
+    Double longitude= new Double(0);
+    Double latitude= new Double(0);
     ProgressBar progressBar;
     private MediaRecorder mRecorder;
     private String Filename=null;
     private static final String LOG_TAG="Record";
-
+    public String company;
+    public String lon,lat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       /* ArrayList<String> arrPerm = new ArrayList<>();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            arrPerm.add(Manifest.permission.READ_PHONE_STATE);
-        }
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            arrPerm.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-        if(!arrPerm.isEmpty()) {
-            String[] permissions = new String[arrPerm.size()];
-            permissions = arrPerm.toArray(permissions);
-            ActivityCompat.requestPermissions(this, permissions, MY_PERMISSIONS_REQUEST);
-        }*/
 
 
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor2 = settings.edit();
-        progressBar=(ProgressBar)findViewById(R.id.login_progress);
+        progressBar= (ProgressBar) findViewById(R.id.progressActivityMain);
         imageView=(ImageView)findViewById(R.id.main_loading_layout);
 
-
-        DatabaseReference ref2=FirebaseDatabase.getInstance().getReference();
-        DatabaseReference ref3=ref2.child("Retailer").child(settings.getString("company",null)).child("latitude");
-          ref3.addValueEventListener( new ValueEventListener() {
+        DatabaseReference myRef2= FirebaseDatabase.getInstance().getReference();
+        myRef2.child("Retailer").orderByChild("username").equalTo(settings.getString("Email",null)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("Hello");
+                System.out.println("hello1");
+                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()){
+                    String company=childSnapshot.getKey();
+                    System.out.println("check"+" "+company);
+                    /*if(settings.getString("company",null)!=null){
+                        editor2.remove("company").apply();
+                        editor2.putString("company",company).apply();
 
-                String lat=Double.toString(dataSnapshot.getValue(Double.class));
-                if(settings.getString("latitude",null)!=null){
-                    editor2.remove("latitude").apply();
-                    editor2.putString("latitude",lat).apply();
-                    System.out.println("MainActivity"+" "+"Latitude"+settings.getString("latitude",null));
-                }
-                else{
-                    editor2.putString("latitude",lat).apply();
-                    System.out.println("MainActivity"+" "+"Latitude"+settings.getString("latitude",null));
-                }
+                    }
+                    else{
+                        editor2.putString("company",company).apply();
+                    }*/
+                    editor2.putString("company",company);
+                    editor2.commit();
+                    /*DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+                    myRef.child("Notification").child(settings.getString("company",null)).setValue("true");*/
+                    //store_name.setText(settings.getString("company",null));
 
-                editor2.commit();
+                    DatabaseReference ref2=FirebaseDatabase.getInstance().getReference("Retailer");
+                    DatabaseReference ref3=ref2.child(settings.getString("company",null)).child("latitude");
+                    Log.e("reference",ref3.getKey());
+                    ValueEventListener postlistnerRef3= new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            System.out.println("Hello"+" "+settings.getString("company",null)+" "+settings.getString("latitude",null));
+
+                            //String lat=String.valueOf(dataSnapshot.getValue(Long.class));
+
+                            latitude=dataSnapshot.getValue(Double.class);
+                            lat=String.valueOf(latitude);
+
+                            if(settings.getString("latitude",null)!=null){
+                                editor2.remove("latitude").apply();
+                                editor2.putString("latitude",lat).apply();
+                                System.out.println("MainActivity"+" "+"Latitude"+" "+settings.getString("latitude",null));
+                            }
+                            else{
+                                editor2.putString("latitude",lat).apply();
+                                System.out.println("MainActivity"+" "+"Latitude"+settings.getString("latitude",null));
+                            }
+
+                            editor2.commit();
+                        }
+
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    };
+                    ref3.addValueEventListener(postlistnerRef3);
+                    DatabaseReference ref4=ref2.child(settings.getString("company",null)).child("longitude");
+                    ValueEventListener postlistnerRef4=new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            System.out.println("Hello 1");
+                            //           Double Lon = dataSnapshot.getValue(Double.class);
+
+                            longitude=dataSnapshot.getValue(Double.class);
+                            lon=String.valueOf(longitude);
+
+                            if(settings.getString("longitude",null)!=null){
+                                editor2.remove("longitude").apply();
+                                editor2.putString("longitude",lon).apply();
+                                System.out.println("MainActivity"+" "+"Longitude"+settings.getString("longitude",null));
+                            }
+                            else{
+                                editor2.putString("longitude",lon).apply();
+                                System.out.println("MainActivity"+" "+"Longitude"+settings.getString("longitude",null));
+                            }
+                            progressBar.setVisibility(View.GONE);
+                            imageView.setVisibility(View.GONE);
+                            editor2.commit();
+
+                        }
+
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    };
+                    ref4.addValueEventListener(postlistnerRef4);
+
+
+                    store_name=(TextView)findViewById(R.id.store_name);
+                    store_name.setText(settings.getString("company",null));
+                    System.out.println("Company main"+settings.getString("company",null));
+                    progressBar.setVisibility(View.GONE);
+                    imageView.setVisibility(View.GONE);
+                    System.out.println("check 1"+" "+settings.getString("company",null));
+                    /*DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("Notification");
+                    ValueEventListener postlistener2=new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            System.out.println("check 2"+" "+settings.getString("company",null));
+                            if (!dataSnapshot.hasChild(settings.getString("company",null))) {
+                                DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+                                myRef.child("Notification").child(settings.getString("company",null)).setValue("true");
+
+                                // run some code
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    };
+                    rootRef.addValueEventListener(postlistener2);*/
+
+
+
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                progressBar.setVisibility(View.GONE);
-                imageView.setVisibility(View.GONE);
-            }
-        });
-
-
-        DatabaseReference ref4=ref2.child("Retailer").child(settings.getString("company",null)).child("longitude");
-         ref4.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("Hello 1");
-     //           Double Lon = dataSnapshot.getValue(Double.class);
-                String lon=Double.toString(dataSnapshot.getValue(Double.class));
-                if(settings.getString("longitude",null)!=null){
-                    editor2.remove("longitude").apply();
-                    editor2.putString("longitude",lon).apply();
-                    System.out.println("MainActivity"+" "+"Longitude"+settings.getString("longitude",null));
-                }
-                else{
-                    editor2.putString("longitude",lon).apply();
-                    System.out.println("MainActivity"+" "+"Longitude"+settings.getString("longitude",null));
-                }
-                progressBar.setVisibility(View.GONE);
-                imageView.setVisibility(View.GONE);
-                editor2.commit();
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+                // Getting Post failed, log a message
+                Log.w("Test", "loadPost:onCancelled", databaseError.toException());
+                // ...
             }
         });
 
@@ -148,9 +203,11 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
 
 
-        store_name=(TextView)findViewById(R.id.store_name);
-        store_name.setText(settings.getString("company",null));
-        System.out.println("Company main"+settings.getString("company",null));
+
+
+
+
+
         /*DatabaseReference myRef2 = FirebaseDatabase.getInstance().getReference();
 
         myRef2.child("Current_User").child(settings.getString("company", null)).setValue("true");

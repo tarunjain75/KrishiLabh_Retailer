@@ -1,15 +1,23 @@
 package example.com.krishilabh_retailer.Adapter;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.github.lzyzsd.circleprogress.CircleProgress;
+
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import example.com.krishilabh_retailer.R;
 
@@ -23,6 +31,7 @@ public class CustomTopFpiAdapter extends BaseAdapter {
     public LayoutInflater Newinflator;
     public Context context;
     public ArrayList<String> listItems=new ArrayList<>();
+    public CircleProgress circleProgress;
 
     public ArrayList<Integer>  Matchpercent=new ArrayList<Integer> ();
     public String Gainpercent[];
@@ -54,10 +63,10 @@ public class CustomTopFpiAdapter extends BaseAdapter {
         convertView=Newinflator.inflate(R.layout.top_fpi_nearby,null);
         TextView title=(TextView)convertView.findViewById(R.id.title);
 
-        TextView machpercent=(TextView)convertView.findViewById(R.id.Matchpercent);
+         circleProgress=(CircleProgress)convertView.findViewById(R.id.Matchpercent);
 
         title.setText(listItems.get(position));
-        machpercent.setText(String.valueOf(Matchpercent.get(position)));
+        circleProgress.setProgress(Matchpercent.get(position));
         //gainpercent.setText(Gainpercent[position]);
         return convertView;
     }

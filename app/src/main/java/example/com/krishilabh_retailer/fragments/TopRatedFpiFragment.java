@@ -2,6 +2,7 @@ package example.com.krishilabh_retailer.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -16,6 +17,9 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
+import com.github.lzyzsd.circleprogress.CircleProgress;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -67,6 +71,7 @@ public class TopRatedFpiFragment extends android.support.v4.app.Fragment {
     ArrayList<Integer> Matchpercent = new ArrayList<Integer>();
     String Gainpercent[] = {"90%", "80%", "70%", "60%", "50%", "40%"};
     CustomTopFpiAdapter customTopFpiAdapter;
+
     int Count = 0, i;
 
 
@@ -122,6 +127,7 @@ public class TopRatedFpiFragment extends android.support.v4.app.Fragment {
             }
         };
         myRef2.addValueEventListener(postListener);
+
 
 
         latitude = settings.getString("latitude", null);

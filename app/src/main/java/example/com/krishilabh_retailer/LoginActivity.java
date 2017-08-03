@@ -39,8 +39,9 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends Activity {
     private FirebaseAuth mAuth;
-    String emailid,pass;
+    String emailid,pass,firm;
     TextView textView;
+    String email,password;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     /**
@@ -61,12 +62,13 @@ public class LoginActivity extends Activity {
     private EditText mPasswordView,mCompany;
     private ProgressBar spinner;
     public CardView cardView;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_in_layout);
-        mCompany=(EditText)findViewById(R.id.company_name);
+       //mCompany=(EditText)findViewById(R.id.company_name);
         spinner = (ProgressBar)findViewById(R.id.login_progress);
         cardView=(CardView)findViewById(R.id.card_view);
         textView=(TextView)findViewById(R.id.create_account);
@@ -119,7 +121,13 @@ public class LoginActivity extends Activity {
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                if(mEmailView.getText().length()==0) {
+                    mEmailView.setError("Field cannot be left blank.");
+                }else if(mPasswordView.getText().length()==0){
+                    mPasswordView.setError("Field cannot be left blank.");
+                }else{
+                    attemptLogin();}
+
 
             }
         });
@@ -138,15 +146,40 @@ public class LoginActivity extends Activity {
 //        mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        email = mEmailView.getText().toString();
         emailid=mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        password = mPasswordView.getText().toString();
         pass=mPasswordView.getText().toString();
+        //firm=mCompany.getText().toString();
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor2 = settings.edit();
+        /*if(settings.getString("Email",null)!=null){
+            editor2.remove("Email").apply();
+            editor2.putString("Email",emailid).apply();
+        }
+        else{
+            editor2.putString("Email",emailid).apply();
+        }
+
+        if (settings.getString("Password",null)!=null){
+            editor2.remove("Password").apply();
+            editor2.putString("Password",pass).apply();
+        }else {
+            editor2.putString("Password",pass).apply();
+        }
+        if(settings.getString("company",null)!=null){
+            editor2.remove("company").apply();
+            editor2.putString("company",firm).apply();
+
+        }
+        else{
+            editor2.putString("company",firm).apply();
+        }*/
+
+        //editor2.putString("company",mCompany.getText().toString());
         editor2.putString("Email",emailid);
-        editor2.putString("company",mCompany.getText().toString());
         editor2.putString("Password",pass);
+        //editor2.putString("company",firm);
         editor2.commit();
 //
         boolean cancel = false;
@@ -158,6 +191,8 @@ public class LoginActivity extends Activity {
             focusView = mPasswordView;
             cancel = true;
         }
+
+
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
@@ -304,7 +339,7 @@ public class LoginActivity extends Activity {
                 });
 
     }
-    /*public void createaccount(String email, String password)
+ /*   public void createaccount(String email, String password)
     {
 
         mAuth.createUserWithEmailAndPassword(email, password)

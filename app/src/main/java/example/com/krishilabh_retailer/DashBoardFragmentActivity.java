@@ -72,7 +72,7 @@ public class DashBoardFragmentActivity extends Activity {
                 swipeContainer.setRefreshing(true);
 
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String company = settings.getString("company", null);
+                String company = settings.getString("company","");
 
                 DatabaseReference myRef2= FirebaseDatabase.getInstance().getReference("Retailer_update").child(company);
 
@@ -132,7 +132,7 @@ public class DashBoardFragmentActivity extends Activity {
             }
         });
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String company = settings.getString("company", null);
+        String company = settings.getString("company", "");
 
         DatabaseReference myRef2= FirebaseDatabase.getInstance().getReference("Retailer_update").child(company);
 
@@ -140,14 +140,11 @@ public class DashBoardFragmentActivity extends Activity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 System.out.println("hello");// Get Post object and use the values to update the UI
-
+                Log.e("dataSnapshot",dataSnapshot.getValue().toString());
                 try {
-                    ItemName.clear();
-                    Quantity.clear();
-                    Rate.clear();
-                    Unit.clear();
-                    Map<String, Object> name = new HashMap<String, Object>();
-                    name = (Map<String, Object>) dataSnapshot.getValue();
+
+                    HashMap<String, Object> name = new HashMap<String, Object>();
+                    name = (HashMap<String, Object>) dataSnapshot.getValue();
                     String[] key = new String[name.size()];
                     int i = 0;
                     for (String k : name.keySet()) {

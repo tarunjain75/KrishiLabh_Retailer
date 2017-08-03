@@ -68,34 +68,7 @@ public class DashboardUpdaterAdapter extends BaseAdapter {
                 Intent intent=new Intent(context, UpdateItemActivity.class);
                 intent.putExtra("product_Name",itemname.get(position));
                 context.startActivity(intent);
-                /**//*
-                inflator=mInflator.inflate(R.layout.edit_dailog_layout,null);
-                final Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.edit_dailog_layout);
-                EditText editPrice=(EditText)dailog.findViewById(R.id.edit_price);
-                editQuantity=(EditText)dailog.findViewById(R.id.edit_quant);
-                editUnit=(EditText)dailog.findViewById(R.id.edit_unit);
-                update=(TextView)dailog.findViewById(R.id.UpadteItemDialog);
 
-
-                final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                final DatabaseReference myRef2 = FirebaseDatabase.getInstance().getReference();
-                final Product user2 = new Product(product_name, editQuantity.getText().toString(), editPrice.getText().toString(), editUnit.getText().toString());
-                update.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-
-                            myRef2.child("Retailer_update").child(settings.getString("company",null)).child(product_name).setValue(user2);
-                            dailog.dismiss();
-                            Toast.makeText(DashBoardFragmentActivity.this,"Item Updated Succesfully",Toast.LENGTH_LONG).show();
-
-                        } catch (DatabaseException r) {
-                            System.out.println(r);
-                        }
-                    }
-                });
-                dailog.show();*/
             }
         });
         return convertView;

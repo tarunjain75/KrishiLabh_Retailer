@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,12 +16,14 @@ import java.util.TimerTask;
  */
 
 public class SplashScreenActivity extends Activity {
+     AVLoadingIndicatorView avi;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.splash_screen_layout);
         FirebaseDatabase.getInstance().getReference().keepSynced(true);
+        avi= (AVLoadingIndicatorView) findViewById(R.id.avi);
         final User USER=new User(SplashScreenActivity.this);
         Timer timer=new Timer();
         timer.schedule(new TimerTask() {

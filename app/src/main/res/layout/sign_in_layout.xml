@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg">
 
@@ -8,12 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp">
+        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,7 +31,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingRight="30dp"
-        android:paddingLeft="30dp">
+        android:paddingLeft="30dp"
+        >
 
         <AutoCompleteTextView
             android:id="@+id/email"
@@ -48,7 +51,7 @@
 
     </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <!--<android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingRight="30dp"
@@ -65,10 +68,11 @@
                 android:drawablePadding="-35dp"
                 android:padding="10dp"
                 android:gravity="center"
+                android:textAllCaps="true"
                 android:singleLine="true"
                 android:textColor="@android:color/black"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </android.support.design.widget.TextInputLayout>-->
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -111,6 +115,7 @@
             android:padding="10dp"
             android:textColor="@android:color/white"
             android:background="@drawable/round_button"/>
+
 
     </LinearLayout>
     <!-- Login progress -->
