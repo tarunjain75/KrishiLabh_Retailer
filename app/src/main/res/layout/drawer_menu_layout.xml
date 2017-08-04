@@ -13,8 +13,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
+            android:orientation="vertical"
+            android:onClick="HOME"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
             <TextView
                 android:id="@+id/homeDrawer"
                 android:layout_width="wrap_content"
@@ -29,13 +34,18 @@
                 android:text="@string/home"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:onClick="HOME"/>
+                />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/white"
                 />
-
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:onClick="SHARE_THIS_APP">
             <TextView
                 android:id="@+id/shareappDrawer"
                 android:layout_width="wrap_content"
@@ -48,7 +58,7 @@
                 android:textColor="@android:color/white"
                 android:layout_gravity=""
                 android:padding="10dp"
-                android:onClick="SHARE_THIS_APP"
+
                 android:text="@string/Share"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -57,8 +67,14 @@
                 android:layout_height="1dp"
                 android:background="@android:color/white"
                 />
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:onClick="RATE_THIS_APP">
 
-            <TextView
+        <TextView
                 android:id="@+id/rateTheApp"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
@@ -69,7 +85,7 @@
                 android:layout_marginLeft="10dp"
                 android:textColor="@android:color/white"
                 android:padding="10dp"
-                android:onClick="RATE_THIS_APP"
+
                 android:text="@string/rating"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -78,7 +94,14 @@
                 android:layout_height="1dp"
                 android:background="@android:color/white"
                 />
-            <TextView
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:onClick="LOGOUT">
+
+        <TextView
                 android:id="@+id/logout"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
@@ -86,7 +109,7 @@
                 android:textColor="@android:color/white"
                 android:drawablePadding="15dp"
                 android:elevation="5dp"
-                android:onClick="LOGOUT"
+
                 android:gravity="start"
                 android:padding="10dp"
                 android:text="@string/logout"
@@ -97,7 +120,7 @@
                 android:layout_height="1dp"
                 android:background="@android:color/white"
                 />
-
+        </LinearLayout>
         </LinearLayout>
 
     </ScrollView>

@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,11 +62,19 @@ public class FpiInfo extends Activity  {
     RecyclerView.Adapter adapter;
     public TextView Total_value;
     public String companyName,T;
+    ImageView backArrow;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fpi_info);
+        backArrow=(ImageView)findViewById(R.id.fpi_back_arrow);
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         FirebaseDatabase.getInstance().getReference().keepSynced(true);
          BroadcastReceiver mMessageReceiver= new BroadcastReceiver() {
             @Override
@@ -147,8 +156,9 @@ public class FpiInfo extends Activity  {
                                 myRef1.setValue(user);
                                 Intent i=new Intent("message");
                                 System.out.println("cost and firmName"+" "+T+" "+companyName);
-
-                                Toast.makeText(FpiInfo.this, "request send to"+""+companyName, Toast.LENGTH_SHORT).show();
+                                Intent intent=new Intent(getApplicationContext(),PaymentActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(FpiInfo.this, "request send to"+" "+companyName, Toast.LENGTH_SHORT).show();
 
                             }
                         });

@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.yarolegovich.lovelydialog.LovelyProgressDialog;
 
 /**
  * Created by User on 6/27/2017.
@@ -42,6 +43,7 @@ public class LoginActivity extends Activity {
     String emailid,pass,firm;
     TextView textView;
     String email,password;
+    LovelyProgressDialog lovelyProgressDialog;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     /**
@@ -135,8 +137,13 @@ public class LoginActivity extends Activity {
     private void attemptLogin() {
 
 
-        cardView.setVisibility(View.VISIBLE);
-        spinner.setVisibility(View.VISIBLE);
+        /*cardView.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.VISIBLE);*/
+        lovelyProgressDialog = new LovelyProgressDialog(this);
+                lovelyProgressDialog.setIcon(R.drawable.ic_cast_connected_white_36dp)
+                        .setTitle(R.string.connecting_to_server)
+                        .setTopColorRes(R.color.teal)
+                        .show();
 //        if (mAuthTask != null) {
 //            return;
 //        }
@@ -318,6 +325,7 @@ public class LoginActivity extends Activity {
                             Log.w("New User", "signInWithEmail", task.getException());
                             Intent intent=new Intent(getApplicationContext(),LoginActivity.class);
                             startActivity(intent);
+                            lovelyProgressDialog.dismiss();
                             Toast.makeText(LoginActivity.this, "Authentication failed.Unable to sign in",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -326,10 +334,12 @@ public class LoginActivity extends Activity {
                         {   User U=new User(getApplicationContext());
                             U.setName(email);
                             System.out.println("TEST"+email);
+
                             Intent in=new Intent(LoginActivity.this,MainActivity.class);
                             //in.putExtra("UID",  user.getUid());
                             startActivity(in);
                             finish();
+                            lovelyProgressDialog.dismiss();
                            Toast.makeText(LoginActivity.this, "Login Successfull ",
                                     Toast.LENGTH_SHORT).show();
                         }

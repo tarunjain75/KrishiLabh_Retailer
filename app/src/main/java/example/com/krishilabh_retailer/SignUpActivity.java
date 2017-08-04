@@ -41,6 +41,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.yarolegovich.lovelydialog.LovelyProgressDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,7 @@ public class SignUpActivity extends Activity implements android.app.LoaderManage
     private FirebaseAuth mAuth;
     String emailid,pass;
     ImageView imageView;
+    LovelyProgressDialog lovelyProgressDialog;
     private FirebaseAuth.AuthStateListener mAuthListener;
     FirebaseUser user;
     /**
@@ -96,49 +98,6 @@ public class SignUpActivity extends Activity implements android.app.LoaderManage
 
 
 
-        // Register a listener to receive callbacks when a place has been selected or an error has
-        // occurred.
-//        DatabaseReference myRef2= FirebaseDatabase.getInstance().getReference();
-//        System.out.println("check");
-//       // System.out.print(myRef2.toString());
-//        ValueEventListener postListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                // Get Post object and use the values to update the UI
-//                Map<String, Object> newPost = (Map<String, Object>) dataSnapshot.getValue();
-//
-//               String []key=new String [newPost.size()];
-//                Object ob= newPost.get("FPI");
-//                HashMap<String,Object>m=(HashMap<String, Object>) ob;
-//                int i=0;
-//                for(String k:m.keySet())
-//                {
-//                    key[i]=k;
-//                    Object USER=m.get(key[i]);
-//                    HashMap<String,Object>test=(HashMap<String, Object>) USER;
-//
-//
-//                    if(test.get("phone").equals("1234568956"))
-//                    {System.out.println("Author: " +test);
-//                    }
-//
-//                }
-//
-//
-//                System.out.println("Author: " +newPost);
-//                System.out.println("Title: " + newPost.get("FPI"));
-//
-//                // ...
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                // Getting Post failed, log a message
-//                Log.w("Test", "loadPost:onCancelled", databaseError.toException());
-//                // ...
-//            }
-//        };
-//        myRef2.addValueEventListener(postListener);
 
         imageView=(ImageView)findViewById(R.id.back);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -213,8 +172,19 @@ public class SignUpActivity extends Activity implements android.app.LoaderManage
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
-
+                if(mEmailView.getText().length()==0) {
+                    mEmailView.setError("Email cannot be left blank.");
+                }else if(mPasswordView.getText().length()==0){
+                    mPasswordView.setError("Password cannot be left blank.");
+                }else if (phone.getText().length()==0){
+                    phone.setError("Phone Number cannot be left blank.");
+                }else if(Licence.getText().length()==0){
+                    Licence.setError("Licence number cannot be left blank.");
+                } else if (company.getText().length()==0){
+                    company.setError("Company Name cannot be left blank.");
+                }
+                else{
+                    attemptLogin();}
             }
         });
 
@@ -275,7 +245,12 @@ public class SignUpActivity extends Activity implements android.app.LoaderManage
 
 
 
-        spinner.setVisibility(View.VISIBLE);
+        /*spinner.setVisibility(View.VISIBLE);*/
+        lovelyProgressDialog=new LovelyProgressDialog(this);
+                lovelyProgressDialog.setIcon(R.drawable.ic_cast_connected_white_36dp)
+                .setTitle(R.string.connecting_to_server)
+                .setTopColorRes(R.color.teal)
+                .show();
 //        if (mAuthTask != null) {
 //            return;
 //        }
@@ -592,13 +567,16 @@ public class SignUpActivity extends Activity implements android.app.LoaderManage
                             Intent i=new Intent(getApplicationContext(),SignUpActivity.class);
                             startActivity(i);
                             finish();
+                            lovelyProgressDialog.dismiss();
                         }
                         else
                         {   Toast.makeText(getApplicationContext(), "registered Successfully ", Toast.LENGTH_SHORT).show();
                             User U=new User(getApplicationContext());
                             U.setName(email);
                             System.out.println("TEST"+email);
-                            user = mAuth.getCurrentUser();}
+                            user = mAuth.getCurrentUser();
+                            lovelyProgressDialog.dismiss();
+                        }
 
                         // ...
                     }

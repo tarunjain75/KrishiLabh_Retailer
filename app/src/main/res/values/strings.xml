@@ -50,6 +50,7 @@
     <string name="password">Password</string>
     <string name="comapanyName">Company</string>
     <string name="number_picker_formatter">%02d</string>
+    <string name="connecting_to_server">Loading</string>
 
 
 

@@ -29,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +54,8 @@ public class DashBoardFragmentActivity extends Activity {
 
     DashboardUpdaterAdapter dashboardUpdaterAdapter;
     public SwipeRefreshLayout swipeContainer;
-
+    TextView noData,noDataName;
+    ImageView noDataView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,9 @@ public class DashBoardFragmentActivity extends Activity {
         setContentView(R.layout.dashboard);
         progressBar=(ProgressBar)findViewById(R.id.progressDashboard);
         loadingLayout=(ImageView)findViewById(R.id.Dashboard_loading_layout);
+        noData=(TextView)findViewById(R.id.centerText);
+        noDataName=(TextView)findViewById(R.id.RetailerText);
+        noDataView=(ImageView)findViewById(R.id.blankData);
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -71,7 +77,7 @@ public class DashBoardFragmentActivity extends Activity {
             public void onRefresh() {
                 swipeContainer.setRefreshing(true);
 
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String company = settings.getString("company","");
 
                 DatabaseReference myRef2= FirebaseDatabase.getInstance().getReference("Retailer_update").child(company);
@@ -106,6 +112,8 @@ public class DashBoardFragmentActivity extends Activity {
                             }
                         }catch (NullPointerException exception){
                             Log.e("exception",exception.toString());
+
+
                         }
                         Log.e("Quantity inside",Quantity.toString());
                         Log.e("Rate inside",Rate.toString());
@@ -131,7 +139,7 @@ public class DashBoardFragmentActivity extends Activity {
 
             }
         });
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String company = settings.getString("company", "");
 
         DatabaseReference myRef2= FirebaseDatabase.getInstance().getReference("Retailer_update").child(company);
@@ -140,7 +148,7 @@ public class DashBoardFragmentActivity extends Activity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 System.out.println("hello");// Get Post object and use the values to update the UI
-                Log.e("dataSnapshot",dataSnapshot.getValue().toString());
+                //Log.e("dataSnapshot",dataSnapshot.getValue().toString());
                 try {
 
                     HashMap<String, Object> name = new HashMap<String, Object>();
@@ -162,7 +170,8 @@ public class DashBoardFragmentActivity extends Activity {
 
                     }
                 }catch (NullPointerException exception){
-                    Log.e("exception",exception.toString());
+                    Log.e("exception 1",exception.toString());
+
                 }
                 listView=(ListView)findViewById(R.id.listview);
                 dashboardUpdaterAdapter= new DashboardUpdaterAdapter(getApplicationContext(),ItemName,Quantity,Rate,Unit);

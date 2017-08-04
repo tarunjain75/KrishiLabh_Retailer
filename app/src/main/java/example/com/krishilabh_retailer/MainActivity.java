@@ -3,12 +3,14 @@ package example.com.krishilabh_retailer;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -43,6 +45,8 @@ import ai.api.model.AIResponse;
 import ai.api.ui.AIButton;
 import example.com.krishilabh_retailer.fragments.FpiNearbyViewPagerFragmentActivity;
 
+import static android.R.attr.offset;
+
 public class MainActivity extends Activity implements View.OnClickListener{
     ImageButton drawer_menu,notify,search;
     DrawerLayout drawerLayout;
@@ -59,13 +63,21 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private static final String LOG_TAG="Record";
     public String company;
     public String lon,lat;
+    public int count=0;
+    /*DrawerArrowDrawable drawerArrowDrawable;
+    float offset;
+    boolean flipped;*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-
+        /*final Resources resources = getResources();
+        drawerArrowDrawable = new DrawerArrowDrawable(this);
+        drawerArrowDrawable.setColor(getResources().getColor(R.color.teal));*/
+        //imageView.setImageDrawable(drawerArrowDrawable);
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor2 = settings.edit();
         progressBar= (ProgressBar) findViewById(R.id.progressActivityMain);
@@ -347,13 +359,19 @@ public class MainActivity extends Activity implements View.OnClickListener{
 //        longitude=getIntent().getExtras().getString("Longitude");
 
         //System.out.println(latitude+","+longitude);
+
+
         initView();
     }
 
-    private void initView() {
+    public void initView() {
         drawer_menu=(ImageButton)findViewById(R.id.menu);
+        //drawer_menu.setImageDrawable(drawerArrowDrawable);
         drawer_menu.setOnClickListener(this);
         drawerLayout=(DrawerLayout)findViewById(R.id.drawer);
+
+
+        
         menu_view=(View) findViewById(R.id.Menu_view);
 
         notify=(ImageButton)findViewById(R.id.notification);
@@ -368,6 +386,11 @@ public class MainActivity extends Activity implements View.OnClickListener{
         logOut_option=(TextView)findViewById(R.id.logout);
 
     }
+
+    /**
+     * When false, rotates from 3 o'clock to 9 o'clock between a drawer icon and a back arrow.
+     * When true, rotates from 9 o'clock to 3 o'clock between a back arrow and a drawer icon.
+     */
 
 
     public void UpdateDemand(View view){
@@ -512,8 +535,24 @@ public class MainActivity extends Activity implements View.OnClickListener{
         mRecorder.release();
         mRecorder = null;
     }
+    public void onBackPressed()
+    {
+        if( count == 1)
+        {
+            count=0;
+            finish();
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(), "Press Back again to quit.", Toast.LENGTH_SHORT).show();
+            count++;
+        }
+
+        return;
+    }
 
 
 }
+
 
 
