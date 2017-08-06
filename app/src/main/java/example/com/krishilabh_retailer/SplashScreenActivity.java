@@ -22,7 +22,7 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.splash_screen_layout);
-        FirebaseDatabase.getInstance().getReference().keepSynced(true);
+        //FirebaseDatabase.getInstance().getReference().keepSynced(true);
         avi= (AVLoadingIndicatorView) findViewById(R.id.avi);
         final User USER=new User(SplashScreenActivity.this);
         Timer timer=new Timer();

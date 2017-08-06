@@ -70,13 +70,13 @@ public class SignUpActivity extends Activity implements android.app.LoaderManage
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
+   /* private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
-    };
+    };*/
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+   /* private UserLoginTask mAuthTask = null;*/
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -172,10 +172,10 @@ public class SignUpActivity extends Activity implements android.app.LoaderManage
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mEmailView.getText().length()==0) {
-                    mEmailView.setError("Email cannot be left blank.");
-                }else if(mPasswordView.getText().length()==0){
-                    mPasswordView.setError("Password cannot be left blank.");
+                if(mEmailView.getText().length()==0 || !isEmailValid(mEmailView.getText().toString())) {
+                    mEmailView.setError("Enter a valid Email id");
+                }else if(mPasswordView.getText().length()==0 || !isPasswordValid(mPasswordView.getText().toString())){
+                    mPasswordView.setError("password length too short");
                 }else if (phone.getText().length()==0){
                     phone.setError("Phone Number cannot be left blank.");
                 }else if(Licence.getText().length()==0){
@@ -270,7 +270,7 @@ public class SignUpActivity extends Activity implements android.app.LoaderManage
         editor2.putString("Password",pass);
         editor2.commit();
 
-        boolean cancel = false;
+       /* boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
@@ -290,7 +290,7 @@ public class SignUpActivity extends Activity implements android.app.LoaderManage
             focusView = mEmailView;
             cancel = true;
         }
-
+*/
 //        if (cancel) {
 //            // There was an error; don't attempt login and focus the first
 //            // form field with an error.
@@ -441,7 +441,7 @@ public class SignUpActivity extends Activity implements android.app.LoaderManage
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+   /* public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
@@ -501,18 +501,18 @@ public class SignUpActivity extends Activity implements android.app.LoaderManage
             //location.setText((place.getAddress()).toString());// TODO: 28/3/17 get the location from here...
 
             CharSequence attributions = place.getAttributions();
-       /* if (!TextUtils.isEmpty(attributions)) {
+       *//* if (!TextUtils.isEmpty(attributions)) {
             mPlaceAttribution.setText(" ");
         } else {
             mPlaceAttribution.setText("");
         }
-        */
+        *//*
         }
 
 
 
 
-    }
+    }*/
 
     public void signin(String email, String password)
     {

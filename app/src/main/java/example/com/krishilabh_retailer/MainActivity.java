@@ -157,8 +157,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
                                 editor2.putString("longitude",lon).apply();
                                 System.out.println("MainActivity"+" "+"Longitude"+settings.getString("longitude",null));
                             }
-                            progressBar.setVisibility(View.GONE);
-                            imageView.setVisibility(View.GONE);
+
                             editor2.commit();
 
                         }
@@ -174,6 +173,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
                     store_name=(TextView)findViewById(R.id.store_name);
                     store_name.setText(settings.getString("company",null));
+                    progressBar.setVisibility(View.GONE);
+                    imageView.setVisibility(View.GONE);
                     System.out.println("Company main"+settings.getString("company",null));
                     progressBar.setVisibility(View.GONE);
                     imageView.setVisibility(View.GONE);

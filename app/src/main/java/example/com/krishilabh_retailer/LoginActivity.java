@@ -49,15 +49,15 @@ public class LoginActivity extends Activity {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+   /* private UserLoginTask mAuthTask = null;*/
 
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
+    /*private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
-    };
+    };*/
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -123,10 +123,10 @@ public class LoginActivity extends Activity {
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mEmailView.getText().length()==0) {
-                    mEmailView.setError("Field cannot be left blank.");
-                }else if(mPasswordView.getText().length()==0){
-                    mPasswordView.setError("Field cannot be left blank.");
+                if(mEmailView.getText().length()==0 || !isEmailValid(mEmailView.getText().toString())) {
+                    mEmailView.setError("Enter a valid Email id");
+                }else if(mPasswordView.getText().length()==0 || !isPasswordValid(mPasswordView.getText().toString())){
+                    mPasswordView.setError("password length too short");
                 }else{
                     attemptLogin();}
 
@@ -189,10 +189,10 @@ public class LoginActivity extends Activity {
         //editor2.putString("company",firm);
         editor2.commit();
 //
-        boolean cancel = false;
-        View focusView = null;
+       /* boolean cancel = false;
+        View focusView = null;*/
 
-        // Check for a valid password, if the user entered one.
+        /*// Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
@@ -211,7 +211,7 @@ public class LoginActivity extends Activity {
             focusView = mEmailView;
             cancel = true;
         }
-
+*/
 
         signin(email,password);
 
@@ -237,7 +237,7 @@ public class LoginActivity extends Activity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    /*public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
@@ -297,18 +297,18 @@ public class LoginActivity extends Activity {
             //location.setText((place.getAddress()).toString());// TODO: 28/3/17 get the location from here...
 
             CharSequence attributions = place.getAttributions();
-       /* if (!TextUtils.isEmpty(attributions)) {
+       *//* if (!TextUtils.isEmpty(attributions)) {
             mPlaceAttribution.setText(" ");
         } else {
             mPlaceAttribution.setText("");
         }
-        */
+        *//*
         }
 
 
 
 
-    }
+    }*/
 
     public void signin(final String email, String password)
     {
