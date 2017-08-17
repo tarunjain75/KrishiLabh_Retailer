@@ -144,13 +144,7 @@ public class LoginActivity extends Activity {
                         .setTitle(R.string.connecting_to_server)
                         .setTopColorRes(R.color.teal)
                         .show();
-//        if (mAuthTask != null) {
-//            return;
-//        }
-//
-//        // Reset errors.
-//        mEmailView.setError(null);
-//        mPasswordView.setError(null);
+
 
         // Store values at the time of the login attempt.
         email = mEmailView.getText().toString();
